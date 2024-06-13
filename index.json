@@ -31,6 +31,16 @@
   ],
   "scripts": [
     {
+      "name": "PandMTL",
+      "fileName": "PandaMTL",
+      "imageURL": "https://static.vecteezy.com/system/resources/previews/002/023/231/large_2x/panda-mascot-logo-free-vector.jpg",
+      "id": 401266,
+      "lang": "en",
+      "ver": "1.0.0",
+      "libVer": "1.0.0",
+      "md5": ""
+    },
+    {
       "name": "MTLNovel",
       "fileName": "MTLNovel",
       "imageURL": "https://github.com/shosetsuorg/extensions/raw/dev/icons/MTLNovel.png",
