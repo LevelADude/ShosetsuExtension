@@ -122,13 +122,13 @@ local listings = {
         return {}
     end),
 
-    Listing("Completed", true,function(data))
+    Listing("Completed", true, function(data)
         local url = baseURL .. "series/?status=completed&order="
 
         local document = GETDocument(url)
 
         return{}
-    end,
+    end),
 
     Listing("Something without any input", false, function()
         -- Previous documentation, except no data or appending.
