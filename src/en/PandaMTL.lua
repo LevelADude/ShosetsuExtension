@@ -1,4 +1,4 @@
--- {"id":401266,"ver":"1.0.0","libVer":"1.0.0","author":"LevelSDude"}
+-- {"id":401266,"ver":"1.0.0","libVer":"1.0.0","author":"Me"}
 
 --- Identification number of the extension.
 --- Should be unique. Should be consistent in all references.
@@ -14,28 +14,28 @@ local id = 401266
 --- Required.
 ---
 --- @type string
-local name = "Panda MTL"
+local name = "PandaMTL"
 
 --- Base URL of the extension. Used to open web view in Shosetsu.
 ---
 --- Required.
 ---
 --- @type string
-local baseURL = "https://pandamtl.com/"
+local baseURL = "https://pandamtl.com/series/"
 
 --- URL of the logo.
 ---
 --- Optional, Default is empty.
 ---
 --- @type string
-local imageURL = "https://static.vecteezy.com/system/resources/previews/002/023/231/large_2x/panda-mascot-logo-free-vector.jpg"
+local imageURL = "https://example.web/asset/logo.png"
 
 --- Shosetsu tries to handle cloudflare protection if this is set to true.
 ---
 --- Optional, Default is false.
 ---
 --- @type boolean
-local hasCloudFlare = true
+local hasCloudFlare = false
 
 --- If the website has search.
 ---
@@ -73,7 +73,12 @@ local searchFilters = {
 --- Notice, each key is surrounded by "[]" and the value is on the right side.
 --- @type table
 local settings = {
-    [1] = "0"
+    [1] = "test",
+    [2] = false,
+    [3] = false,
+    [4] = 2,
+    [5] = "A",
+    [6] = "B"
 }
 
 --- Settings model for Shosetsu to render.
@@ -81,7 +86,14 @@ local settings = {
 --- Optional, Default is empty.
 ---
 --- @type Filter[] | Array
-local settingsModel = {}
+local settingsModel = {
+    TextFilter(1, "RANDOM STRING INPUT"),
+    SwitchFilter(2, "RANDOM SWITCH INPUT"),
+    CheckboxFilter(3, "RANDOM CHECKBOX INPUT"),
+    TriStateFilter(4, "RANDOM TRISTATE CHECKBOX INPUT"),
+    RadioGroupFilter(5, "RANDOM RGROUP INPUT", { "A", "B", "C" }),
+    DropdownFilter(6, "RANDOM DDOWN INPUT", { "A", "B", "C" })
+}
 
 --- ChapterType provided by the extension.
 ---
@@ -95,7 +107,7 @@ local chapterType = ChapterType.HTML
 --- Optional, Default is 1.
 ---
 --- @type number
-local startIndex = 0
+local startIndex = 1
 
 --- Listings that users can navigate in Shosetsu.
 ---
@@ -103,36 +115,28 @@ local startIndex = 0
 ---
 --- @type Listing[] | Array
 local listings = {
-    Listing("Browse List", false, function(data)
+    Listing("Something", false, function(data)
         -- Many sites use the baseURL + some path, you can perform the URL construction here.
         -- You can also extract query data from [data]. But do perform a null check, for safety.
-        local url = baseURL .. "series/"
+        local url = baseURL
 
         local document = GETDocument(url)
 
         return {}
     end),
-    Listing("Completed and Popular", true, function(data)
-
+    Listing("Something (with incrementing pages!)", true, function(data)
+        --- @type int
+        local page = data[PAGE]
         -- Previous documentation, + appending page
-        local url = baseURL .. "series/?status=completed&order=popular"
+        local url = baseURL .. "?p=" .. page
 
         local document = GETDocument(url)
 
         return {}
     end),
-
-    Listing("Completed", true, function(data)
-        local url = baseURL .. "series/?status=completed&order="
-
-        local document = GETDocument(url)
-
-        return{}
-    end),
-
     Listing("Something without any input", false, function()
         -- Previous documentation, except no data or appending.
-        local url = baseURL .. "series/"
+        local url = baseURL
 
         local document = GETDocument(url)
 
@@ -156,9 +160,9 @@ local function shrinkURL(url, type)
     -- Thus you would then program two substitutions, one to remove URL/novel/,
     --  and one to remove URL/chapter/
     if type == KEY_NOVEL_URL then
-        return url:gsub(".-pandamtl.com/", "")
+        return url:gsub(".-example%.web", "")
     else
-        return url:gsub(".-pandamtl.com/", "")
+        return url:gsub(".-example%.web", "")
     end
 end
 
