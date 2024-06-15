@@ -191,9 +191,13 @@ local function search(data)
 
     --- Get the user text query to pass through.
     --- @type string
-    local query = data[QUERY]
+    local queryContent = data[QUERY]
+    local doc = getDocument("https://pandamtl.com/page/".. page .."/?s=queryContent")
 
-    return {}
+    return NovelInfo(){
+        title = document:selectFirst("h1"):text(),
+        description = document:selectFirst(".sersys entry-content-body")
+    }
 end
 
 -- Return all properties in a lua table.
