@@ -33,10 +33,10 @@
     {
       "name": "PandaMTL",
       "fileName": "PandaMTL",
-      "imageURL": "https://static.vecteezy.com/system/resources/previews/002/023/231/large_2x/panda-mascot-logo-free-vector.jpg",
+      "imageURL": "https://raw.githubusercontent.com/LevelADude/ShosetsuExtension/main/icons/panda-mascot-vector-icon.jpg",
       "id": 401266,
       "lang": "en",
-      "ver": "1.0.0",
+      "ver": "1.0.1",
       "libVer": "1.0.0",
       "md5": ""
     },
