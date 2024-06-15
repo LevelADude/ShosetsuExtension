@@ -94,7 +94,7 @@ local listings = {
         --- @type int
         local page = data[PAGE]
         -- Previous documentation, + appending page
-        local url = baseURL .. "?page=" .. page
+        local url = baseURL .. "?p=" .. page
 
         local document = GETDocument(url)
 
@@ -108,7 +108,13 @@ local listings = {
 
         return {}
     end),
-    Listing("Start Page",true,function()  end)
+    Listing("Start Page",true,function()
+        local url = baseURL
+
+        local document = GETDocument(url)
+
+        return {}
+    end)
 }
 
 --- Shrink the website url down. This is for space saving purposes.
