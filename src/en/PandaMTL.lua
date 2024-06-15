@@ -107,7 +107,8 @@ local listings = {
         local document = GETDocument(url)
 
         return {}
-    end)
+    end),
+    Listing("Start Page",true,getListing)
 }
 
 --- Shrink the website url down. This is for space saving purposes.
