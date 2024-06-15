@@ -108,7 +108,7 @@ local listings = {
 
         return {}
     end),
-    Listing("Start Page",true,getListing)
+    Listing("Start Page",true,function()  end)
 }
 
 --- Shrink the website url down. This is for space saving purposes.
