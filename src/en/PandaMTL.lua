@@ -28,14 +28,14 @@ local baseURL = "https://pandamtl.com/series/"
 --- Optional, Default is empty.
 ---
 --- @type string
-local imageURL = "https://example.web/asset/logo.png"
+local imageURL = "https://raw.githubusercontent.com/LevelADude/ShosetsuExtension/main/icons/panda-mascot-vector-icon.jpg"
 
 --- Shosetsu tries to handle cloudflare protection if this is set to true.
 ---
 --- Optional, Default is false.
 ---
 --- @type boolean
-local hasCloudFlare = false
+local hasCloudFlare = true
 
 --- If the website has search.
 ---
@@ -53,47 +53,13 @@ local isSearchIncrementing = true
 
 --- Filters to display via the filter fab in Shosetsu.
 ---
---- Optional, Default is none.
----
---- @type Filter[] | Array
-local searchFilters = {
-    TextFilter(5, "RANDOM STRING INPUT"),
-    SwitchFilter(6, "RANDOM SWITCH INPUT"),
-    CheckboxFilter(7, "RANDOM CHECKBOX INPUT"),
-    TriStateFilter(8, "RANDOM TRISTATE CHECKBOX INPUT"),
-    RadioGroupFilter(9, "RANDOM RGROUP INPUT", { "A", "B", "C" }),
-    DropdownFilter(10, "RANDOM DDOWN INPUT", { "A", "B", "C" })
-}
-
---- Internal settings store.
----
---- Completely optional.
----  But required if you want to save results from [updateSetting].
----
---- Notice, each key is surrounded by "[]" and the value is on the right side.
---- @type table
-local settings = {
-    [1] = "test",
-    [2] = false,
-    [3] = false,
-    [4] = 2,
-    [5] = "A",
-    [6] = "B"
-}
 
 --- Settings model for Shosetsu to render.
 ---
 --- Optional, Default is empty.
 ---
 --- @type Filter[] | Array
-local settingsModel = {
-    TextFilter(1, "RANDOM STRING INPUT"),
-    SwitchFilter(2, "RANDOM SWITCH INPUT"),
-    CheckboxFilter(3, "RANDOM CHECKBOX INPUT"),
-    TriStateFilter(4, "RANDOM TRISTATE CHECKBOX INPUT"),
-    RadioGroupFilter(5, "RANDOM RGROUP INPUT", { "A", "B", "C" }),
-    DropdownFilter(6, "RANDOM DDOWN INPUT", { "A", "B", "C" })
-}
+local settingsModel = {}
 
 --- ChapterType provided by the extension.
 ---
@@ -128,7 +94,7 @@ local listings = {
         --- @type int
         local page = data[PAGE]
         -- Previous documentation, + appending page
-        local url = baseURL .. "?p=" .. page
+        local url = baseURL .. "?page=" .. page
 
         local document = GETDocument(url)
 
@@ -159,11 +125,8 @@ local function shrinkURL(url, type)
     --  And a chapter is URL/chapter/12345.
     -- Thus you would then program two substitutions, one to remove URL/novel/,
     --  and one to remove URL/chapter/
-    if type == KEY_NOVEL_URL then
-        return url:gsub(".-example%.web", "")
-    else
-        return url:gsub(".-example%.web", "")
-    end
+
+        return url:gsub("https://pandamtl.com/series/", "")
 end
 
 --- Expand a given URL.
@@ -176,12 +139,9 @@ end
 local function expandURL(url, type)
     -- Currently the two branches are the same.
     -- Read [shrinkURL] documentation in regards to what you should do.
-    -- Hint, this is the opposite.
-    if type == KEY_NOVEL_URL then
+
         return baseURL .. url
-    else
-        return baseURL .. url
-    end
+
 end
 
 --- Get a chapter passage based on its chapterURL.
@@ -195,8 +155,10 @@ local function getPassage(chapterURL)
 
     --- Chapter page, extract info from it.
     local document = GETDocument(url)
-
-    return ""
+    local title = document:selectFirst("h1"):text()
+    document = docement.selectFirst(".wrap-body")
+    document:child(0):before("<h1>"..title.."</h1>");
+    return pageOfElem(document, true)""
 end
 
 --- Load info on a novel.
@@ -206,12 +168,14 @@ end
 --- @param novelURL string shrunken novel url.
 --- @return NovelInfo
 local function parseNovel(novelURL)
-    local url = shrinkURL(novelURL, KEY_NOVEL_URL)
-
+    local url = baseURL .. novelURL
     --- Novel page, extract info from it.
     local document = GETDocument(url)
 
-    return NovelInfo()
+    return NovelInfo(){
+        title = document:selectFirst("h1"):text(),
+        description = document:selectFirst(".sersys entry-content-body")
+    }
 end
 
 --- Called to search for novels off a website.
@@ -232,22 +196,11 @@ local function search(data)
     return {}
 end
 
---- Called when a user changes a setting and when the extension is being initialized.
----
---- Optional, But required if [settingsModel] is not empty.
----
---- @param id int Setting key as stated in [settingsModel].
---- @param value any Value pertaining to the type of setting. Int/Boolean/String.
---- @return void
-local function updateSetting(id, value)
-    settings[id] = value
-end
-
 -- Return all properties in a lua table.
 return {
     -- Required
-    id = id,
-    name = name,
+    id = 401266,
+    name = "PandaMTL",
     baseURL = baseURL,
     listings = listings, -- Must have at least one listing
     getPassage = getPassage,
@@ -257,9 +210,9 @@ return {
 
     -- Optional values to change
     imageURL = imageURL,
-    hasCloudFlare = hasCloudFlare,
-    hasSearch = hasSearch,
-    isSearchIncrementing = isSearchIncrementing,
+    hasCloudFlare = true,
+    hasSearch = true,
+    isSearchIncrementing = true,
     searchFilters = searchFilters,
     settings = settingsModel,
     chapterType = chapterType,
